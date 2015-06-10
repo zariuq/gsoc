@@ -24,6 +24,7 @@ data E = Base Int
        | Const Int
        deriving (Typeable,Data,Eq,Show)
 
+-- I got some weird error when I had Base Char. 
 eval :: E -> (Int -> Int -> Int)
 eval (Base c) 
     | c == 1 = (+)
@@ -37,6 +38,7 @@ evalc :: E -> Int
 evalc (Const n) = n
 evalc _ = maxBound
 
+-- if p = (+) then you have n + q, where q is also a function.
 apply :: (Int -> Int -> Int) -> Int -> (Int -> Int -> Int) -> (Int -> Int -> Int)
 apply p n q = (\x y -> p n (q x y))
 
@@ -50,6 +52,7 @@ instance GenProg (Rand StdGen) E where
     r <- getRandomR (0,length options - 1)
     options !! r
 	 
+-- I was getting insanely big negative fvals which ended up being 0 error somehow.
 myFitness :: (Int,Double) -> E -> Double
 myFitness (n,n') e = error + size
   where error = realToFrac $ (abs . (n-)) (if fval < -(10^6) then maxBound else fval) 
